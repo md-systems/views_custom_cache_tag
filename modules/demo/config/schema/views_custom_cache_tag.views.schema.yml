@@ -1,0 +1,11 @@
+views.cache.custom_tag:
+  type: mapping
+  mapping:
+    type:
+      type: string
+    options:
+      type: mapping
+      mapping:
+        custom_tag:
+          type: string
+          label: 'Custom tag list'
