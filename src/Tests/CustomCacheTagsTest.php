@@ -24,11 +24,6 @@ class CustomCacheTagsTest extends WebTestBase {
   use AssertPageCacheTagsTrait;
 
   /**
-   * Disabled config schema checking temporarily until all errors are resolved.
-   */
-  protected $strictConfigSchema = FALSE;
-
-  /**
    * Modules to enable.
    *
    * @var array
@@ -79,14 +74,24 @@ class CustomCacheTagsTest extends WebTestBase {
 
     // Check the cache tags in the views.
     $this->assertPageCacheTags(Url::fromRoute('view.view_node_type_a.page_1'), array(
+      'config:filter.format.plain_text',
       'config:views.view.view_node_type_a',
+      'node:2',
       'node:node_type_a',
-      'rendered'
+      'node_view',
+      'rendered',
+      'user:0',
+      'user_view'
     ));
     $this->assertPageCacheTags(Url::fromRoute('view.view_node_type_b.page_1'), array(
+      'config:filter.format.plain_text',
       'config:views.view.view_node_type_b',
+      'node:3',
       'node:node_type_b',
-      'rendered'
+      'node_view',
+      'rendered',
+      'user:0',
+      'user_view'
     ));
     // Verify cache hits in both views,Cached in assertPageCacheTags().
     $this->verifyPageCache(Url::fromRoute('view.view_node_type_a.page_1'), 'HIT');
@@ -103,7 +108,7 @@ class CustomCacheTagsTest extends WebTestBase {
       ],
       'type' => 'node_type_b',
       'created' => 1,
-      'title' => $this->randomMachineName(8),
+      'title' => $title = $this->randomMachineName(8),
       'nid' => 4,
     ]);
     $node_b->enforceIsNew(TRUE);
@@ -114,7 +119,8 @@ class CustomCacheTagsTest extends WebTestBase {
     $this->verifyPageCache(Url::fromRoute('view.view_node_type_a.page_1'), 'HIT');
     // Make sure type B view is cached again.
     $this->verifyPageCache(Url::fromRoute('view.view_node_type_b.page_1'), 'HIT');
-
+    $this->drupalGet(Url::fromRoute('view.view_node_type_b.page_1'));
+    $this->assertText($title);
     // Save the view again, check the cache tag invalidation.
     $view_b = View::load('view_node_type_b');
     $view_b->save();

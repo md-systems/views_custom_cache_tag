@@ -1,9 +1,12 @@
+uuid: e5c53829-d364-491a-b600-ad473e827d61
 langcode: en
 status: true
 dependencies:
   config:
+    - core.entity_view_mode.node.teaser
     - node.type.node_type_a
   module:
+    - entity_reference
     - node
     - views_custom_cache_tag
 id: view_node_type_a
@@ -27,7 +30,7 @@ display:
       cache:
         type: custom_tag
         options:
-          custom_tag: node:node_type_a
+          custom_tag: 'node:node_type_a'
       query:
         type: views_query
         options:
@@ -68,9 +71,16 @@ display:
             last: 'last »'
           quantity: 9
       style:
-        type: table
+        type: default
+        options:
+          grouping: {  }
+          row_class: ''
+          default_row_class: true
       row:
-        type: fields
+        type: 'entity:node'
+        options:
+          relationship: none
+          view_mode: teaser
       fields:
         title:
           id: title
