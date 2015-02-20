@@ -13,8 +13,7 @@ php:
 notifications:
   email:
     - saschagros@gmail.com
-    - ifux@gassmann.ch
-    - arild@klavaro.se
+    - anushka.11@cse.mrt.ac.lk
 
 env:
   - PATH=$PATH:/home/travis/.composer/vendor/bin
