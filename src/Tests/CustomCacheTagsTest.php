@@ -12,6 +12,7 @@ use Drupal\Core\Url;
 use Drupal\node\Entity\Node;
 use Drupal\simpletest\WebTestBase;
 use Drupal\system\Tests\Cache\AssertPageCacheTagsTrait;
+use Drupal\views\Entity\View;
 
 /**
  * Tests the custom cache tags in views.
@@ -44,7 +45,7 @@ class CustomCacheTagsTest extends WebTestBase {
   public function testCustomCacheTags() {
 
     $this->enablePageCaching();
-    // Create a new node of type A
+    // Create a new node of type A.
     $node_a = Node::create([
       'body' => [
         [
@@ -60,7 +61,7 @@ class CustomCacheTagsTest extends WebTestBase {
     $node_a->enforceIsNew(TRUE);
     $node_a->save();
 
-    // Create a new node of type B
+    // Create a new node of type B.
     $node_b = Node::create([
       'body' => [
         [
@@ -78,14 +79,14 @@ class CustomCacheTagsTest extends WebTestBase {
 
     // Check the cache tags in the views.
     $this->assertPageCacheTags(Url::fromRoute('view.view_node_type_a.page_1'), array(
+      'config:views.view.view_node_type_a',
       'node:node_type_a',
-      'rendered',
-      'view:view_node_type_a'
+      'rendered'
     ));
     $this->assertPageCacheTags(Url::fromRoute('view.view_node_type_b.page_1'), array(
+      'config:views.view.view_node_type_b',
       'node:node_type_b',
-      'rendered',
-      'view:view_node_type_b'
+      'rendered'
     ));
     // Verify cache hits in both views,Cached in assertPageCacheTags().
     $this->verifyPageCache(Url::fromRoute('view.view_node_type_a.page_1'), 'HIT');
@@ -114,8 +115,14 @@ class CustomCacheTagsTest extends WebTestBase {
     // Make sure type B view is cached again.
     $this->verifyPageCache(Url::fromRoute('view.view_node_type_b.page_1'), 'HIT');
 
+    // Save the view again, check the cache tag invalidation.
+    $view_b = View::load('view_node_type_b');
+    $view_b->save();
 
-
+    // Ensure cache tags invalidation in node type B view.
+    $this->verifyPageCache(Url::fromRoute('view.view_node_type_b.page_1'), 'MISS');
+    // Make sure the node type A tags are not invalidated.
+    $this->verifyPageCache(Url::fromRoute('view.view_node_type_a.page_1'), 'HIT');
   }
 
   /**

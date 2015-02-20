@@ -64,12 +64,10 @@ class CustomTag extends CachePluginBase {
    * {@inheritdoc}
    */
   public function getCacheTags() {
-    $id = $this->view->storage->id();
-    $view_tags = array('view:' . $id);
-
+    $id = $this->view->storage->getCacheTags();
     $custom_tags = preg_split('/\r\n|[\r\n]/', $this->options['custom_tag']);
     $custom_tags = array_map('trim', $custom_tags);
-    $tags = Cache::mergeTags($custom_tags, $view_tags);
+    $tags = Cache::mergeTags($custom_tags, $id);
     return $tags;
   }
 
