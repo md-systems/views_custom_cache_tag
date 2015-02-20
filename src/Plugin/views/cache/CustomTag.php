@@ -39,7 +39,7 @@ class CustomTag extends CachePluginBase {
   /**
    * {@inheritdoc}
    */
-  protected function defineOptions() {
+  public function defineOptions() {
     $options = parent::defineOptions();
     $options['custom_tag'] = array('default' => '');
     return $options;
@@ -63,7 +63,7 @@ class CustomTag extends CachePluginBase {
   /**
    * {@inheritdoc}
    */
-  protected function getCacheTags() {
+  public function getCacheTags() {
     $id = $this->view->storage->id();
     $view_tags = array('view:' . $id);
 
@@ -76,7 +76,7 @@ class CustomTag extends CachePluginBase {
   /**
    * {@inheritdoc}
    */
-  protected function cacheExpire($type) {
+  public function cacheExpire($type) {
     return FALSE;
   }
 
