@@ -55,7 +55,6 @@ install:
   - cd $TRAVIS_BUILD_DIR/..
   - git clone --depth 1 --branch 8.0.x http://git.drupal.org/project/drupal.git
   - cd drupal
-  - curl https://www.drupal.org/files/issues/2381217-52.patch | git apply --index
   - cd modules
   - git clone --depth 1 --branch 8.x-1.x http://git.drupal.org/project/monitoring.git
   # Restart apache and test it
