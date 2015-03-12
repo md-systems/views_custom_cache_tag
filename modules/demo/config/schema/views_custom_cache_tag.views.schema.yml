@@ -9,3 +9,6 @@ views.cache.custom_tag:
         custom_tag:
           type: string
           label: 'Custom tag list'
+
+views.argument_validator.entity:*:
+  type: views.argument_validator_entity

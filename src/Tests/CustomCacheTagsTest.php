@@ -75,21 +75,21 @@ class CustomCacheTagsTest extends WebTestBase {
     $node_b->save();
 
     // Check the cache tags in the views.
-    $this->assertPageCacheContextsAndTags(Url::fromRoute('view.view_node_type_a.page_1'), $cache_contexts, array(
+    $this->assertPageCacheContextsAndTags(Url::fromRoute('view.view_node_type_ab.page_1', array('arg_0' => 'node_type_a')), $cache_contexts, array(
       'config:filter.format.plain_text',
-      'config:views.view.view_node_type_a',
+      'config:views.view.view_node_type_ab',
       'node:2',
-      'node:node_type_a',
+      'node:type:node_type_a',
       'node_view',
       'rendered',
       'user:0',
       'user_view'
     ));
-    $this->assertPageCacheContextsAndTags(Url::fromRoute('view.view_node_type_b.page_1'), $cache_contexts, array(
+    $this->assertPageCacheContextsAndTags(Url::fromRoute('view.view_node_type_ab.page_1', array('arg_0' => 'node_type_b')), $cache_contexts, array(
       'config:filter.format.plain_text',
-      'config:views.view.view_node_type_b',
+      'config:views.view.view_node_type_ab',
       'node:3',
-      'node:node_type_b',
+      'node:type:node_type_b',
       'node_view',
       'rendered',
       'user:0',
@@ -112,22 +112,30 @@ class CustomCacheTagsTest extends WebTestBase {
     ]);
     $node_b->enforceIsNew(TRUE);
     $node_b->save();
-    // Ensure cache tags invalidation in node type B view.
-    $this->verifyPageCache(Url::fromRoute('view.view_node_type_b.page_1'), 'MISS');
     // Make sure the node type A tags are not invalidated.
-    $this->verifyPageCache(Url::fromRoute('view.view_node_type_a.page_1'), 'HIT');
-    // Make sure type B view is cached again.
-    $this->verifyPageCache(Url::fromRoute('view.view_node_type_b.page_1'), 'HIT');
-    $this->drupalGet(Url::fromRoute('view.view_node_type_b.page_1'));
+    $this->verifyPageCache(Url::fromRoute('view.view_node_type_ab.page_1', array('arg_0' => 'node_type_a')), 'HIT');
+    // Ensure cache tags invalidation in node type B view.
+    $this->assertPageCacheContextsAndTags(Url::fromRoute('view.view_node_type_ab.page_1', array('arg_0' => 'node_type_b')), $cache_contexts, array(
+      'config:filter.format.plain_text',
+      'config:views.view.view_node_type_ab',
+      'node:3',
+      'node:4',
+      'node:type:node_type_b',
+      'node_view',
+      'rendered',
+      'user:0',
+      'user_view'
+    ));
+
+    $this->drupalGet(Url::fromRoute('view.view_node_type_ab.page_1', array('arg_0' => 'node_type_b')));
     $this->assertText($title);
     // Save the view again, check the cache tag invalidation.
-    $view_b = View::load('view_node_type_b');
+    $view_b = View::load('view_node_type_ab');
     $view_b->save();
 
-    // Ensure cache tags invalidation in node type B view.
-    $this->verifyPageCache(Url::fromRoute('view.view_node_type_b.page_1'), 'MISS');
-    // Make sure the node type A tags are not invalidated.
-    $this->verifyPageCache(Url::fromRoute('view.view_node_type_a.page_1'), 'HIT');
+    // Ensure cache tags invalidation in node type A & B views.
+    $this->verifyPageCache(Url::fromRoute('view.view_node_type_ab.page_1', array('arg_0' => 'node_type_b')), 'MISS');
+    $this->verifyPageCache(Url::fromRoute('view.view_node_type_ab.page_1', array('arg_0' => 'node_type_a')), 'MISS');
   }
 
   /**
