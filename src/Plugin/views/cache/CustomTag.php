@@ -67,8 +67,8 @@ class CustomTag extends CachePluginBase {
     $id = $this->view->storage->getCacheTags();
     $custom_tags = preg_split('/\r\n|[\r\n]/', $this->options['custom_tag']);
     $custom_tags = array_map('trim', $custom_tags);
-    $tags = Cache::mergeTags($custom_tags, $id);
-    return $tags;
+    $custom_tags =  array_map(function ($tag){ return $this->view->getStyle()->tokenizeValue($tag, 0);}, $custom_tags);
+    return Cache::mergeTags($custom_tags, $id);
   }
 
   /**
@@ -77,5 +77,4 @@ class CustomTag extends CachePluginBase {
   public function cacheExpire($type) {
     return FALSE;
   }
-
 }

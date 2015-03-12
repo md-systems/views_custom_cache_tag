@@ -11,8 +11,9 @@ use Drupal\Core\Entity\Entity;
 use Drupal\Core\Url;
 use Drupal\node\Entity\Node;
 use Drupal\simpletest\WebTestBase;
-use Drupal\system\Tests\Cache\AssertPageCacheTagsTrait;
+use Drupal\system\Tests\Cache\AssertPageCacheContextsAndTagsTrait;
 use Drupal\views\Entity\View;
+use Drupal\views\Tests\AssertViewsCacheTagsTrait;
 
 /**
  * Tests the custom cache tags in views.
@@ -21,7 +22,7 @@ use Drupal\views\Entity\View;
  */
 class CustomCacheTagsTest extends WebTestBase {
 
-  use AssertPageCacheTagsTrait;
+  use AssertPageCacheContextsAndTagsTrait;
 
   /**
    * Modules to enable.
@@ -40,6 +41,7 @@ class CustomCacheTagsTest extends WebTestBase {
   public function testCustomCacheTags() {
 
     $this->enablePageCaching();
+    $cache_contexts = array('theme', 'timezone', 'user.roles');
     // Create a new node of type A.
     $node_a = Node::create([
       'body' => [
@@ -73,7 +75,7 @@ class CustomCacheTagsTest extends WebTestBase {
     $node_b->save();
 
     // Check the cache tags in the views.
-    $this->assertPageCacheTags(Url::fromRoute('view.view_node_type_a.page_1'), array(
+    $this->assertPageCacheContextsAndTags(Url::fromRoute('view.view_node_type_a.page_1'), $cache_contexts, array(
       'config:filter.format.plain_text',
       'config:views.view.view_node_type_a',
       'node:2',
@@ -83,7 +85,7 @@ class CustomCacheTagsTest extends WebTestBase {
       'user:0',
       'user_view'
     ));
-    $this->assertPageCacheTags(Url::fromRoute('view.view_node_type_b.page_1'), array(
+    $this->assertPageCacheContextsAndTags(Url::fromRoute('view.view_node_type_b.page_1'), $cache_contexts, array(
       'config:filter.format.plain_text',
       'config:views.view.view_node_type_b',
       'node:3',
@@ -93,9 +95,6 @@ class CustomCacheTagsTest extends WebTestBase {
       'user:0',
       'user_view'
     ));
-    // Verify cache hits in both views,Cached in assertPageCacheTags().
-    $this->verifyPageCache(Url::fromRoute('view.view_node_type_a.page_1'), 'HIT');
-    $this->verifyPageCache(Url::fromRoute('view.view_node_type_b.page_1'), 'HIT');
 
     // Create a new node of type B ensure that the page
     // cache entry invalidates.
