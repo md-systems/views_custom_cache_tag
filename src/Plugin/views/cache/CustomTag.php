@@ -78,6 +78,9 @@ class CustomTag extends CachePluginBase {
     return FALSE;
   }
 
+  /**
+   * {@inheritdoc}
+   */
   public function cacheGet($type) {
     $result = parent::cacheGet($type);
 
@@ -86,4 +89,5 @@ class CustomTag extends CachePluginBase {
       drupal_set_message('Executing view ' . $this->view->storage->id() . ':' . $this->view->current_display . ':' . implode(',', $this->view->args) . ' (' . implode(',', $this->view->getCacheTags()) . ')');
     }
   }
+
 }
