@@ -77,4 +77,13 @@ class CustomTag extends CachePluginBase {
   public function cacheExpire($type) {
     return FALSE;
   }
+
+  public function cacheGet($type) {
+    $result = parent::cacheGet($type);
+
+    // This can be used to debug/test the views cache result.
+    if ($type == 'results' && !$result && \Drupal::state()->get('views_custom_cache_tag.execute_debug', FALSE)) {
+      drupal_set_message('Executing view ' . $this->view->storage->id() . ':' . $this->view->current_display . ':' . implode(',', $this->view->args) . ' (' . implode(',', $this->view->getCacheTags()) . ')');
+    }
+  }
 }
