@@ -88,6 +88,7 @@ class CustomTag extends CachePluginBase {
     if ($type == 'results' && !$result && \Drupal::state()->get('views_custom_cache_tag.execute_debug', FALSE)) {
       drupal_set_message('Executing view ' . $this->view->storage->id() . ':' . $this->view->current_display . ':' . implode(',', $this->view->args) . ' (' . implode(',', $this->view->getCacheTags()) . ')');
     }
+    return $result;
   }
 
 }
