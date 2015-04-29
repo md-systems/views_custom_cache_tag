@@ -5,7 +5,6 @@ dependencies:
     - field.field.node.node_type_a.body
     - node.type.node_type_a
   module:
-    - path
     - text
 id: node.node_type_a.default
 targetEntityType: node
@@ -23,11 +22,6 @@ content:
   created:
     type: datetime_timestamp
     weight: 10
-    settings: {  }
-    third_party_settings: {  }
-  path:
-    type: path
-    weight: 30
     settings: {  }
     third_party_settings: {  }
   promote:

@@ -5,7 +5,6 @@ dependencies:
     - field.field.node.node_type_b.body
     - node.type.node_type_b
   module:
-    - path
     - text
 id: node.node_type_b.default
 targetEntityType: node
@@ -26,10 +25,6 @@ content:
     settings: {  }
     third_party_settings: {  }
   path:
-    type: path
-    weight: 30
-    settings: {  }
-    third_party_settings: {  }
   promote:
     type: boolean_checkbox
     settings:
