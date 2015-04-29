@@ -32,6 +32,8 @@ class CustomCacheTagsTest extends WebTestBase {
   public static $modules = array(
     'node',
     'views',
+    'menu_ui',
+    'path',
     'views_custom_cache_tag_demo'
   );
 
@@ -41,7 +43,7 @@ class CustomCacheTagsTest extends WebTestBase {
   public function testCustomCacheTags() {
 
     $this->enablePageCaching();
-    $cache_contexts = array('theme', 'timezone', 'user.roles');
+    $cache_contexts = array('theme', 'timezone', 'languages:language_content', 'languages:language_interface', 'url', 'user.node_grants:view', 'user.permissions');
     // Create a new node of type A.
     $node_a = Node::create([
       'body' => [
@@ -78,22 +80,24 @@ class CustomCacheTagsTest extends WebTestBase {
     $this->assertPageCacheContextsAndTags(Url::fromRoute('view.view_node_type_ab.page_1', array('arg_0' => 'node_type_a')), $cache_contexts, array(
       'config:filter.format.plain_text',
       'config:views.view.view_node_type_ab',
+      'config:user.role.anonymous',
       'node:2',
       'node:type:node_type_a',
       'node_view',
       'rendered',
       'user:0',
-      'user_view'
+      'user_view',
     ));
     $this->assertPageCacheContextsAndTags(Url::fromRoute('view.view_node_type_ab.page_1', array('arg_0' => 'node_type_b')), $cache_contexts, array(
       'config:filter.format.plain_text',
       'config:views.view.view_node_type_ab',
+      'config:user.role.anonymous',
       'node:3',
       'node:type:node_type_b',
       'node_view',
       'rendered',
       'user:0',
-      'user_view'
+      'user_view',
     ));
 
     // Create a new node of type B ensure that the page
@@ -118,6 +122,7 @@ class CustomCacheTagsTest extends WebTestBase {
     $this->assertPageCacheContextsAndTags(Url::fromRoute('view.view_node_type_ab.page_1', array('arg_0' => 'node_type_b')), $cache_contexts, array(
       'config:filter.format.plain_text',
       'config:views.view.view_node_type_ab',
+      'config:user.role.anonymous',
       'node:3',
       'node:4',
       'node:type:node_type_b',
