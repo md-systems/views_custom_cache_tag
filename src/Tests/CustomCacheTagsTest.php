@@ -6,7 +6,6 @@
 
 namespace Drupal\views_custom_cache_tag\Tests;
 
-use Drupal\Component\Utility\String;
 use Drupal\Core\Entity\Entity;
 use Drupal\Core\Url;
 use Drupal\node\Entity\Node;
