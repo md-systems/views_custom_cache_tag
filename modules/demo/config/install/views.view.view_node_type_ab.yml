@@ -177,8 +177,8 @@ display:
             fail: 'not found'
           validate_options:
             operation: view
-            multiple: '0'
-            access: 0
+            multiple: 0
+            access: false
             bundles: { }
           glossary: false
           limit: 0
