@@ -85,8 +85,8 @@ class CustomTag extends CachePluginBase {
     $result = parent::cacheGet($type);
 
     // This can be used to debug/test the views cache result.
-    if ($type == 'results' && !$result && \Drupal::state()->get('views_custom_cache_tag.execute_debug', FALSE)) {
-      drupal_set_message('Executing view ' . $this->view->storage->id() . ':' . $this->view->current_display . ':' . implode(',', $this->view->args) . ' (' . implode(',', $this->view->getCacheTags()) . ')');
+    if ($type == 'results' && !$result && \Drupal::state()->get('views_custom_cache_tag.execute_debug', FALSE) && \Drupal::currentUser()->hasPermission('access site reports')) {
+      drupal_set_message('Executing view ' . $this->view->storage->id() . ':' . $this->view->current_display . ': ' . implode(', ', $this->view->args) . ' (' . implode(', ', $this->view->getCacheTags()) . ')');
     }
     return $result;
   }
