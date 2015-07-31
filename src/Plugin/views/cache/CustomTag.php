@@ -7,9 +7,9 @@
 
 namespace Drupal\views_custom_cache_tag\Plugin\views\cache;
 
-use Drupal\views\Plugin\views\cache\CachePluginBase;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\views\Plugin\views\cache\Tag;
 
 /**
  * Simple caching of query results for Views displays.
@@ -22,7 +22,7 @@ use Drupal\Core\Form\FormStateInterface;
  *   help = @Translation("Tag based caching of data. Caches will persist until any related cache tags are invalidated.")
  * )
  */
-class CustomTag extends CachePluginBase {
+class CustomTag extends Tag {
 
   /**
    * Overrides Drupal\views\Plugin\Plugin::$usesOptions.
